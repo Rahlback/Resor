@@ -1,6 +1,5 @@
 package resor.ahlback.rasmus.kollektivresoplanerare;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -12,7 +11,6 @@ import android.widget.Button;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.IOException;
 
 import resor.ahlback.rasmus.kollektivresoplanerare.Interfaces.JsonDownloadResponse;
 
