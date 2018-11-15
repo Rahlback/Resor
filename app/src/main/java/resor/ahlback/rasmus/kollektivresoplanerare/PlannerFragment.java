@@ -8,11 +8,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 
+import java.util.ArrayList;
+
 import resor.ahlback.rasmus.kollektivresoplanerare.Interfaces.JsonDownloadResponse;
+import resor.ahlback.rasmus.kollektivresoplanerare.JsonClasses.JsonPlaceFinderItem;
 
 public class PlannerFragment extends Fragment implements JsonDownloadResponse {
     private String apiKey ;
@@ -50,11 +54,31 @@ public class PlannerFragment extends Fragment implements JsonDownloadResponse {
 
     @Override
     public void processFinished(JSONObject output, int responseCode) {
+//        try {
+////            Log.d("ApiHandler", output.get("ResponseData").toString());
+//
+//        } catch (JSONException e){
+//            e.printStackTrace();
+//        }
+        getListOfPlaces(output);
+    }
+
+    public void getListOfPlaces(JSONObject obj){
+        JSONArray list = null;
+        ArrayList<JsonPlaceFinderItem> items = new ArrayList<>();
+
         try {
-            Log.d("ApiHandler", output.get("ResponseData").toString());
+            list = obj.getJSONArray("ResponseData");
+            for(int i = 0; i < list.length(); i++){
+                items.add(new JsonPlaceFinderItem(list.getJSONObject(i)));
+            }
         } catch (JSONException e){
             e.printStackTrace();
         }
+
+        for(JsonPlaceFinderItem item : items)
+            Log.d("PlannerFragment", item.toString());
+
     }
 
 }
