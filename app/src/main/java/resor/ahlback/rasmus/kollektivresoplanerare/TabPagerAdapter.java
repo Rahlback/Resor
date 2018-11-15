@@ -30,7 +30,7 @@ public class TabPagerAdapter extends FragmentStatePagerAdapter {
                 return new TrafficDisruptionsFragment();
         }
 
-        return new TabNavigationFragment();
+        return null;
     }
 
     @Override
