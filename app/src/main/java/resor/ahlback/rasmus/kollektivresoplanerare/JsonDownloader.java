@@ -14,6 +14,8 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 
+import javax.net.ssl.HttpsURLConnection;
+
 import resor.ahlback.rasmus.kollektivresoplanerare.Interfaces.JsonDownloadResponse;
 
 public class JsonDownloader extends AsyncTask<String, String, String> {

@@ -18,9 +18,5 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void testGetKey(){
-        String hallplatser = "Hållplatser:" + getString(R.string.hallplatser_och_linjer);
-        String platsuppslag = "Platsuppslag: " + getString(R.string.platsuppslag);
-        String stringBuilder = hallplatser + "\n" + platsuppslag;
-        textView.setText(stringBuilder);
     }
 }
