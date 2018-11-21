@@ -6,6 +6,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 
 import org.json.JSONArray;
@@ -22,6 +24,8 @@ public class PlannerFragment extends Fragment implements JsonDownloadResponse {
     private String apiKey ;
     private ApiHandler apiHandler;
 
+    String[] languages = { "C","C++","Java","C#","PHP","JavaScript","jQuery","AJAX","JSON" };
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
 //        ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.planner_layout, container,false);
@@ -31,6 +35,14 @@ public class PlannerFragment extends Fragment implements JsonDownloadResponse {
         apiKey = getActivity().getResources().getString(R.string.platsuppslag);
         apiHandler = new ApiHandler(this);
         setPlannerButton(view);
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.select_dialog_item, languages);
+        //Find TextView control
+        AutoCompleteTextView acTextView = (AutoCompleteTextView) view.findViewById(R.id.plannerTextInput);
+        //Set the number of characters the user must type before the drop down list is shown
+        acTextView.setThreshold(1);
+        //Set the adapter
+        acTextView.setAdapter(adapter);
 
         return view;
     }
