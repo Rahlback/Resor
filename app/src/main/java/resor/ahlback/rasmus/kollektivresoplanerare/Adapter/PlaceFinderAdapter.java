@@ -12,6 +12,8 @@ import java.util.ArrayList;
 import resor.ahlback.rasmus.kollektivresoplanerare.JsonClasses.JsonPlaceFinderItem;
 import resor.ahlback.rasmus.kollektivresoplanerare.R;
 
+
+//TODO> Make filter for adapter. Implement into PlannerFragment
 public class PlaceFinderAdapter extends ArrayAdapter<JsonPlaceFinderItem> {
     private ArrayList<JsonPlaceFinderItem> items;
     private ArrayList<JsonPlaceFinderItem> itemsAll;
@@ -36,10 +38,10 @@ public class PlaceFinderAdapter extends ArrayAdapter<JsonPlaceFinderItem> {
 
         JsonPlaceFinderItem item = items.get(position);
         if (item != null) {
-            TextView placeLabel = (TextView) v.findViewById(R.id.customerNameLabel);
-            if (customerNameLabel != null) {
+            TextView placeLabel = (TextView) v.findViewById(R.id.singleChoiceText);
+            if (placeLabel != null) {
 //              Log.i(MY_DEBUG_TAG, "getView Customer Name:"+customer.getName());
-                customerNameLabel.setText(customer.getName());
+                placeLabel.setText(item.getName());
             }
         }
         return v;
