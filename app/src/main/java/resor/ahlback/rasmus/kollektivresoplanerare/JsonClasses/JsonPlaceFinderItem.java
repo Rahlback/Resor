@@ -36,6 +36,10 @@ public class JsonPlaceFinderItem {
         }
     }
 
+    public String getName(){
+        return name;
+    }
+
     @Override
     public String toString(){
         String itemString =   "Name: "      + name      + "\n"
