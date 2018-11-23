@@ -19,6 +19,8 @@ import org.json.JSONObject;
 
 
 import java.util.ArrayList;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import resor.ahlback.rasmus.kollektivresoplanerare.Interfaces.JsonDownloadResponse;
 import resor.ahlback.rasmus.kollektivresoplanerare.JsonClasses.JsonPlaceFinderItem;
@@ -26,6 +28,8 @@ import resor.ahlback.rasmus.kollektivresoplanerare.JsonClasses.JsonPlaceFinderIt
 public class PlannerFragment extends Fragment implements JsonDownloadResponse {
     private String apiKey ;
     private ApiHandler apiHandler;
+
+
 
     ArrayList<String> fromStationStringList;
     ArrayList<JsonPlaceFinderItem> data;
@@ -83,11 +87,27 @@ public class PlannerFragment extends Fragment implements JsonDownloadResponse {
 
             @Override
             public void afterTextChanged(Editable editable) {
-                
+                if (fromStation == null){
+                    placeFinderAPILookUp(editable.toString());
+                }
+                else if(!fromStation.getName().equals(editable.toString())){
+                    placeFinderAPILookUp(editable.toString());
+                }
             }
         });
 
         return view;
+    }
+
+    private void placeFinderAPILookUp(final String place){
+        try{
+            apiHandler.placeFinder(apiKey, place);
+//            Log.d("PlannerFragment", "Looking up " + place);
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+
+
     }
 
     private JsonPlaceFinderItem findDataPoint(String dataString){
@@ -151,8 +171,8 @@ public class PlannerFragment extends Fragment implements JsonDownloadResponse {
             e.printStackTrace();
         }
 
-        for(JsonPlaceFinderItem item : items)
-            Log.d("PlannerFragment", item.toString());
+//        for(JsonPlaceFinderItem item : items)
+//            Log.d("PlannerFragment", item.toString());
         return items;
 
     }
