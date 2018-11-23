@@ -48,7 +48,7 @@ public class JsonDownloader extends AsyncTask<String, String, String> {
 
             while ((line = reader.readLine()) != null) {
                 buffer.append(line+"\n");
-//                Log.d("Response: ", "> " + line);   //here u ll get whole response...... :-)
+                Log.d("Response: ", "> " + line);   //here u ll get whole response...... :-)
 
             }
 
@@ -81,10 +81,10 @@ public class JsonDownloader extends AsyncTask<String, String, String> {
 
             obj = new JSONObject(json);
 
-//            Log.d("My App", obj.toString());
+            Log.d("My App", obj.toString());
 
         } catch (Throwable t) {
-//            Log.e("My App", "Could not parse malformed JSON: \"" + json + "\"");
+            Log.e("My App", "Could not parse malformed JSON: \"" + json + "\"");
         }
 
         delegate.processFinished(obj, responseCode);
