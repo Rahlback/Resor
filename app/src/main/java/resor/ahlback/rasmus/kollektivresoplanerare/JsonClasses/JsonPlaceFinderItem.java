@@ -24,7 +24,7 @@ public class JsonPlaceFinderItem {
 
     public JsonPlaceFinderItem(JSONObject obj){
 //        Log.d("JsonPlaceFinderItem", obj.get("ResponseData"));
-        Log.d("JsonPlaceFinderItem", obj.toString());
+//        Log.d("JsonPlaceFinderItem", obj.toString());
         try{
             name = obj.getString("Name");
             siteId = obj.getString("SiteId");
