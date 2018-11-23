@@ -2,6 +2,8 @@ package resor.ahlback.rasmus.kollektivresoplanerare;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -57,18 +59,46 @@ public class PlannerFragment extends Fragment implements JsonDownloadResponse {
         //Set the adapter
         fromStationAutocompleteText.setAdapter(fromStationAdapter);
 
+//        fromStationAdapter = new ArrayAdapter<JsonPlaceFinderItem>(getActivity(), android.R.layout.select_dialog_item, data);
         fromStationAutocompleteText.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
             @Override
             public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
-                fromStation = data.get(arg2);
-                Log.d("PlannerFragment", fromStation.toString());
+                fromStation = findDataPoint(arg0.getItemAtPosition(arg2).toString());
+                Log.d("PlannerFragment", "Data chosen> " + fromStation.toString());
             }
 
         });
 
+        fromStationAutocompleteText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                
+            }
+        });
+
         return view;
     }
+
+    private JsonPlaceFinderItem findDataPoint(String dataString){
+        for(JsonPlaceFinderItem item : data){
+            if(dataString.equals(item.getName())){
+                return item;
+            }
+        }
+        return null;
+    }
+
 
     private void setPlannerButton(View view){
         Button button = (Button) view.findViewById(R.id.plannerButton);
