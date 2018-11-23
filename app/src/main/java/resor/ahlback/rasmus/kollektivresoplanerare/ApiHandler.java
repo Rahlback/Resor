@@ -37,11 +37,11 @@ public class ApiHandler{
         this.delegate = delegate;
     }
 
-    public int placeFinder(String apiKey, String searchWords) throws Exception{
-        return placeFinder(apiKey, searchWords, "json", true, 20);
+    public int placeFinder(String apiKey, String searchWords, int responseCode) throws Exception{
+        return placeFinder(apiKey, searchWords, "json", true, 20, responseCode);
     }
 
-    public int placeFinder(String apiKey, String searchWords, String format, Boolean stationsOnly, int maxResults) throws Exception{
+    public int placeFinder(String apiKey, String searchWords, String format, Boolean stationsOnly, int maxResults, int responseCode) throws Exception{
 //        StringBuilder url = new StringBuilder("http://api.sl.se/api2/typeahead.");
        // http://api.sl.se/api2/typeahead.<FORMAT>?key=<DIN NYCKEL>&searchstring=<SÖKORD>&stationsonly=<ENDAST STATIONER>&maxresults=<MAX ANTAL SVAR>
 
@@ -62,7 +62,7 @@ public class ApiHandler{
                     "&stationsonly=" + Boolean.toString(stationsOnly) +
                     "&maxresults=" + maxResults;
 
-            new JsonDownloader(delegate, 1).execute(url);
+            new JsonDownloader(delegate, responseCode).execute(url);
             Timer placeFinderTimer = new Timer();
             placeFinderTimer.schedule(new TimerTask() {
                 @Override
@@ -77,14 +77,14 @@ public class ApiHandler{
             return 200;
 
         } else {
-            addPlaceFinderCallToBackStack(apiKey,searchWords,format,stationsOnly,maxResults);
+            addPlaceFinderCallToBackStack(apiKey,searchWords,format,stationsOnly,maxResults,responseCode);
             return 408;
         }
 
 
     }
 
-    private void addPlaceFinderCallToBackStack(String apiKey, String searchWords, String format, Boolean stationsOnly, int maxResults){
+    private void addPlaceFinderCallToBackStack(String apiKey, String searchWords, String format, Boolean stationsOnly, int maxResults, final int responseCode){
         placeFinderApiKeyBackStack = apiKey;
         placeFinderSearchWordsBackStack = searchWords;
         placeFinderFormatBackStack = format;
@@ -103,7 +103,7 @@ public class ApiHandler{
 
                     try{
                         Log.d("Timer", "Timer has already run");
-                        placeFinder(placeFinderApiKeyBackStack, placeFinderSearchWordsBackStack,placeFinderFormatBackStack,placeFinderStationsOnly,placeFinderMaxResultsBackStack);
+                        placeFinder(placeFinderApiKeyBackStack, placeFinderSearchWordsBackStack,placeFinderFormatBackStack,placeFinderStationsOnly,placeFinderMaxResultsBackStack,responseCode);
                     } catch (Exception e){
                         e.printStackTrace();
                     }
