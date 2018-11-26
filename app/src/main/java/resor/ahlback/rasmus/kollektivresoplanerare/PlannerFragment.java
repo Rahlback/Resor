@@ -6,6 +6,9 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 
 import org.json.JSONArray;
@@ -22,6 +25,14 @@ public class PlannerFragment extends Fragment implements JsonDownloadResponse {
     private String apiKey ;
     private ApiHandler apiHandler;
 
+    ArrayList<String> fromStationStringList;
+    ArrayList<JsonPlaceFinderItem> data;
+    ArrayAdapter<String> fromStationAdapter;
+
+    AutoCompleteTextView fromStationAutocompleteText;
+    JsonPlaceFinderItem fromStation = null;
+    JsonPlaceFinderItem toStation = null;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
 //        ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.planner_layout, container,false);
@@ -31,6 +42,30 @@ public class PlannerFragment extends Fragment implements JsonDownloadResponse {
         apiKey = getActivity().getResources().getString(R.string.platsuppslag);
         apiHandler = new ApiHandler(this);
         setPlannerButton(view);
+
+        fromStationStringList = new ArrayList<>();
+//        String[] test = {"Test", "Text", "Hyper"};
+//        for(String testItem : test){
+//            languages.add(testItem);
+//        }
+
+        fromStationAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.select_dialog_item, fromStationStringList);
+        //Find TextView control
+        fromStationAutocompleteText = (AutoCompleteTextView) view.findViewById(R.id.plannerTextInput);
+        //Set the number of characters the user must type before the drop down list is shown
+        fromStationAutocompleteText.setThreshold(1);
+        //Set the adapter
+        fromStationAutocompleteText.setAdapter(fromStationAdapter);
+
+        fromStationAutocompleteText.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+            @Override
+            public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
+                fromStation = data.get(arg2);
+                Log.d("PlannerFragment", fromStation.toString());
+            }
+
+        });
 
         return view;
     }
@@ -48,22 +83,32 @@ public class PlannerFragment extends Fragment implements JsonDownloadResponse {
                 } catch (Exception e){
                     e.printStackTrace();
                 }
+
             }
         });
     }
 
-    @Override
-    public void processFinished(JSONObject output, int responseCode) {
-//        try {
-////            Log.d("ApiHandler", output.get("ResponseData").toString());
-//
-//        } catch (JSONException e){
-//            e.printStackTrace();
-//        }
-        getListOfPlaces(output);
+    private void updateAutocompleteText(ArrayList<JsonPlaceFinderItem> newStrings){
+        fromStationAdapter.clear();
+        for (JsonPlaceFinderItem string: newStrings) {
+            fromStationAdapter.add(string.getName());
+        }
+
+        fromStationAdapter.getFilter().filter(fromStationAutocompleteText.getText(), fromStationAutocompleteText);
     }
 
-    public void getListOfPlaces(JSONObject obj){
+    @Override
+    public void processFinished(JSONObject output, int responseCode) {
+        data = getListOfPlaces(output);
+
+        switch (responseCode){
+            case 1:
+                updateAutocompleteText(data);
+                break;
+        }
+    }
+
+    public ArrayList<JsonPlaceFinderItem> getListOfPlaces(JSONObject obj){
         JSONArray list = null;
         ArrayList<JsonPlaceFinderItem> items = new ArrayList<>();
 
@@ -78,7 +123,10 @@ public class PlannerFragment extends Fragment implements JsonDownloadResponse {
 
         for(JsonPlaceFinderItem item : items)
             Log.d("PlannerFragment", item.toString());
+        return items;
 
     }
+
+
 
 }
